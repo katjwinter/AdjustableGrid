@@ -4,12 +4,19 @@
 "version": "0.1",
 "description": "View an adjustable grid over any website, allowing customizable precise orientation of movable pieces in Google Draw, Easel.ly, etc.",
 "browser_action" : {
-	"default_icon": "images/icon.png",
-	"default_title": "grid",
+	"default_icon": "icon.png",
+	"default_title": "grid"
 },
 "background": {
 	"scripts": ["IconClickListener.js"],
 	"persistent": false
 },
+"web_accessible_resources": [
+	"Grid.css",
+	"jquery-1.6.2.min.js",
+	"underscore-min.js",
+	"js/jquery-ui-1.10.4.custom.min.js",
+	"Grid.js"
+],
 "permissions": ["tabs", "http://*/*", "https://*/*"]
 }
