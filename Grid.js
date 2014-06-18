@@ -22,7 +22,8 @@ var lineTemplate = "<% _.each(lineList, function(line) { %>" +
 					"</div>" +
 					"<% } ); %>";
 var temp = (_.template(lineTemplate, {lineList: lineList, vLineList: vLineList}));
-$("cover").html(temp);
+$("cover").append(temp);
+$("cover").append("<canvas id='hcounter' width='50' height='50' style='position:absolute; top:10px; left:10px; border:1px solid black; display:none;'></canvas>");
 
 // Attach actions to the line elements for clicking and for dragging
 $(".hline").draggable( {
@@ -30,6 +31,7 @@ $(".hline").draggable( {
     containment:"cover",
     stop:handleStop,
     start:handleStart,
+	drag:handleDrag,
     helper:"clone",
     appendTo:"parent"
 });
@@ -110,13 +112,31 @@ $(".hline, .vline, .thick").click(
     }
 )
 
+function handleDrag(event, line) {
+	var hcounterContext = $("#hcounter")[0].getContext('2d');
+	var left = event.pageX;
+	var top = event.pageY;
+	if (event.pageY > 60) {
+		top = top - 60;
+	}
+	else {
+		top = top + 10;
+	}
+	$("#hcounter").css( {"top":top, "left":left} );
+	hcounterContext.clearRect(0,0, 50,50);
+	hcounterContext.font = "10px Arial";
+	hcounterContext.fillText(event.pageY,8,8);
+}
+
 function handleStart(event, line) {
     line.helper.removeClass("thick");
+	$("#hcounter").show();
 }
 
 function handleStop(event, line) {
     var y = line.position.top;
     $(this).css({"top":y});
+	$("#hcounter").hide();
 }
 
 function handleVStop(event, line) {
