@@ -6,7 +6,7 @@
     height:2px; 
     background: black; 
 }
-.thick
+.hline.thick
 {
     height:10px;
 }
@@ -15,8 +15,12 @@
     position: absolute;
     top: 0px;
     height: 100%;
-    width: 5px;
+    width: 2px;
     background: blue;
+}
+.vline.thick
+{
+	width: 10px;
 }
 cover
 {

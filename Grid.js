@@ -11,12 +11,17 @@ var baseSelected = false;
 var comparatorSelected = false;
 
 // Draw vertical and horizontal lines to make a grid across the page, overtop of content
-var lineList = [{top:"100"},{top:"200"}, {top:"300"}, {top:"400"}];
+var lineList = [{top:"100"},{top:"200"}, {top:"300"}, {top:"400"}]; // example for testing
+var vLineList = [{left:"100"},{left:"200"},{left:"300"},{left:"400"}];
 var lineTemplate = "<% _.each(lineList, function(line) { %>" + 
 						"<div class='hline' style='top: <%=line.top%>px;'>" +
 						"</div>" +
+					"<% } ); %>" +
+					"<% _.each(vLineList, function(line) { %>" +
+					"<div class='vline' style='left: <%=line.left%>px;'>" +
+					"</div>" +
 					"<% } ); %>";
-var temp = (_.template(lineTemplate, {lineList: lineList}));
+var temp = (_.template(lineTemplate, {lineList: lineList, vLineList: vLineList}));
 $("cover").html(temp);
 
 // Attach actions to the line elements for clicking and for dragging
@@ -29,7 +34,16 @@ $(".hline").draggable( {
     appendTo:"parent"
 });
 
-$(".hline, .thick").hover( 
+$(".vline").draggable( {
+	cursor:"move",
+	containment:"cover",
+	stop:handleVStop,
+	start:handleStart,
+	helper:"clone",
+	appendTo:"parent"
+});
+
+$(".hline, .hline .thick").hover( 
     function() {
         var pos = $(this).position();
         var newPos = pos.top - 5;
@@ -42,7 +56,24 @@ $(".hline, .thick").hover(
         var newPos = pos.top + 5;
         $(this).css({"top":newPos});
     }
-).click(
+)
+
+$(".vline, .vline .thick").hover( 
+    function() {
+        var pos = $(this).position();
+        var newPos = pos.left - 5;
+        $(this).css({left:newPos});
+        $(this).addClass("thick");
+    },
+    function() {
+        $(this).removeClass("thick");
+        var pos = $(this).position();
+        var newPos = pos.left + 5;
+        $(this).css({"left":newPos});
+    }
+)
+
+$(".hline, .vline, .thick").click(
     function() {
         if (baseSelected) {
             if (comparatorSelected) {
@@ -86,4 +117,9 @@ function handleStart(event, line) {
 function handleStop(event, line) {
     var y = line.position.top;
     $(this).css({"top":y});
+}
+
+function handleVStop(event, line) {
+	var x = line.position.left;
+	$(this).css({"left":x});
 }
